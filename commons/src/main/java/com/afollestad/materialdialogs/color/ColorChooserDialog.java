@@ -48,6 +48,7 @@ public class ColorChooserDialog extends DialogFragment
   private ColorCallback callback;
   private GridView grid;
   private View colorChooserCustomFrame;
+  private TextView txtHexLabel;
   private EditText customColorHex;
   private View customColorIndicator;
   private TextWatcher customColorTextWatcher;
@@ -233,6 +234,7 @@ public class ColorChooserDialog extends DialogFragment
         selectedColor = Color.parseColor("#DEDEDE");
       }
 
+      txtHexLabel.setTextColor(selectedColor);
       customColorHex.setTextColor(selectedColor);
       customSeekAValue.setTextColor(selectedColor);
       customSeekBValue.setTextColor(selectedColor);
@@ -416,7 +418,7 @@ public class ColorChooserDialog extends DialogFragment
         builder.textColor = Color.BLACK;
       }
       }
-
+      txtHexLabel = v.findViewById(R.id.md_hexLabel);
       customColorIndicator = v.findViewById(R.id.md_colorIndicator);
       customSeekA = v.findViewById(R.id.md_colorA);
       customSeekAValue = v.findViewById(R.id.md_colorAValue);
@@ -435,6 +437,7 @@ public class ColorChooserDialog extends DialogFragment
       dialog.getActionButton(DialogAction.NEGATIVE).setTextColor(builder.textColor);
       dialog.getActionButton(DialogAction.NEUTRAL).setTextColor(builder.textColor);
 
+      txtHexLabel.setTextColor(builder.textColor);
       customColorHex.setTextColor(builder.textColor);
       customSeekAValue.setTextColor(builder.textColor);
       customSeekRValue.setTextColor(builder.textColor);
