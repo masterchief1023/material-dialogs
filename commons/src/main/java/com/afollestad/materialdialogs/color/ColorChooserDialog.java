@@ -26,12 +26,14 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.afollestad.materialdialogs.commons.R;
 import com.afollestad.materialdialogs.internal.MDTintHelper;
 import com.afollestad.materialdialogs.util.DialogUtils;
+
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -51,12 +53,16 @@ public class ColorChooserDialog extends DialogFragment
   private TextWatcher customColorTextWatcher;
   private SeekBar customSeekA;
   private TextView customSeekAValue;
+  private TextView customSeekALabel;
   private SeekBar customSeekR;
   private TextView customSeekRValue;
+  private TextView customSeekRLabel;
   private SeekBar customSeekG;
   private TextView customSeekGValue;
+  private TextView customSeekGLabel;
   private SeekBar customSeekB;
   private TextView customSeekBValue;
+  private TextView customSeekBLabel;
   private SeekBar.OnSeekBarChangeListener customColorRgbListener;
   private int selectedCustomColor;
 
@@ -227,19 +233,28 @@ public class ColorChooserDialog extends DialogFragment
         selectedColor = Color.parseColor("#DEDEDE");
       }
 
+      customColorHex.setTextColor(selectedColor);
+      customSeekAValue.setTextColor(selectedColor);
+      customSeekBValue.setTextColor(selectedColor);
+      customSeekGValue.setTextColor(selectedColor);
+      customSeekRValue.setTextColor(selectedColor);
+      customSeekALabel.setTextColor(selectedColor);
+      customSeekRLabel.setTextColor(selectedColor);
+      customSeekGLabel.setTextColor(selectedColor);
+      customSeekBLabel.setTextColor(selectedColor);
       if (getBuilder().dynamicButtonColor) {
         dialog.getActionButton(DialogAction.POSITIVE).setTextColor(selectedColor);
         dialog.getActionButton(DialogAction.NEGATIVE).setTextColor(selectedColor);
         dialog.getActionButton(DialogAction.NEUTRAL).setTextColor(selectedColor);
-      }
 
-      if (customSeekR != null) {
-        if (customSeekA.getVisibility() == View.VISIBLE) {
-          MDTintHelper.setTint(customSeekA, selectedColor);
+        if (customSeekR != null) {
+          if (customSeekA.getVisibility() == View.VISIBLE) {
+            MDTintHelper.setTint(customSeekA, selectedColor);
+          }
+          MDTintHelper.setTint(customSeekR, selectedColor);
+          MDTintHelper.setTint(customSeekG, selectedColor);
+          MDTintHelper.setTint(customSeekB, selectedColor);
         }
-        MDTintHelper.setTint(customSeekR, selectedColor);
-        MDTintHelper.setTint(customSeekG, selectedColor);
-        MDTintHelper.setTint(customSeekB, selectedColor);
       }
     }
   }
@@ -394,6 +409,14 @@ public class ColorChooserDialog extends DialogFragment
       selectedCustomColor = preselectColor;
       colorChooserCustomFrame = v.findViewById(R.id.md_colorChooserCustomFrame);
       customColorHex = v.findViewById(R.id.md_hexInput);
+      if (builder.textColor == 0) {
+      if(builder.theme==Theme.DARK){
+        builder.textColor = Color.WHITE;
+      }else{
+        builder.textColor = Color.BLACK;
+      }
+      }
+
       customColorIndicator = v.findViewById(R.id.md_colorIndicator);
       customSeekA = v.findViewById(R.id.md_colorA);
       customSeekAValue = v.findViewById(R.id.md_colorAValue);
@@ -403,7 +426,24 @@ public class ColorChooserDialog extends DialogFragment
       customSeekGValue = v.findViewById(R.id.md_colorGValue);
       customSeekB = v.findViewById(R.id.md_colorB);
       customSeekBValue = v.findViewById(R.id.md_colorBValue);
+      customSeekALabel = v.findViewById(R.id.md_colorALabel);
+      customSeekRLabel = v.findViewById(R.id.md_colorRLabel);
+      customSeekGLabel = v.findViewById(R.id.md_colorGLabel);
+      customSeekBLabel = v.findViewById(R.id.md_colorBLabel);
 
+      dialog.getActionButton(DialogAction.POSITIVE).setTextColor(builder.textColor);
+      dialog.getActionButton(DialogAction.NEGATIVE).setTextColor(builder.textColor);
+      dialog.getActionButton(DialogAction.NEUTRAL).setTextColor(builder.textColor);
+
+      customColorHex.setTextColor(builder.textColor);
+      customSeekAValue.setTextColor(builder.textColor);
+      customSeekRValue.setTextColor(builder.textColor);
+      customSeekGValue.setTextColor(builder.textColor);
+      customSeekBValue.setTextColor(builder.textColor);
+      customSeekALabel.setTextColor(builder.textColor);
+      customSeekRLabel.setTextColor(builder.textColor);
+      customSeekGLabel.setTextColor(builder.textColor);
+      customSeekBLabel.setTextColor(builder.textColor);
       if (!builder.allowUserCustomAlpha) {
         v.findViewById(R.id.md_colorALabel).setVisibility(View.GONE);
         customSeekA.setVisibility(View.GONE);
@@ -639,6 +679,7 @@ public class ColorChooserDialog extends DialogFragment
     @Nullable int[][] colorsSub;
     @Nullable String tag;
     @Nullable Theme theme;
+    @ColorInt int textColor;
 
     boolean accentMode = false;
     boolean dynamicButtonColor = true;
@@ -679,6 +720,10 @@ public class ColorChooserDialog extends DialogFragment
       return this;
     }
 
+    public Builder textColor(@ColorInt int textColor){
+      this.textColor = textColor;
+      return this;
+    }
     public Builder preselect(@ColorInt int preselect) {
       preselectColor = preselect;
       setPreselectionColor = true;

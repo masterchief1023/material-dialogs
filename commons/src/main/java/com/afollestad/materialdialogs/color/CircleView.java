@@ -121,29 +121,6 @@ public class CircleView extends FrameLayout {
     setBackgroundColor(DialogUtils.getColor(getContext(), color));
   }
 
-  /** @deprecated */
-  @Deprecated
-  @Override
-  public void setBackground(Drawable background) {
-    throw new IllegalStateException("Cannot use setBackground() on CircleView.");
-  }
-
-  /** @deprecated */
-  @SuppressWarnings("deprecation")
-  @Deprecated
-  @Override
-  public void setBackgroundDrawable(Drawable background) {
-    throw new IllegalStateException("Cannot use setBackgroundDrawable() on CircleView.");
-  }
-
-  /** @deprecated */
-  @SuppressWarnings("deprecation")
-  @Deprecated
-  @Override
-  public void setActivated(boolean activated) {
-    throw new IllegalStateException("Cannot use setActivated() on CircleView.");
-  }
-
   public void setSelected(boolean selected) {
     this.selected = selected;
     requestLayout();
