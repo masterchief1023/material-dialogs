@@ -3,6 +3,7 @@
 [ ![Core](https://api.bintray.com/packages/drummer-aidan/maven/material-dialogs%3Acore/images/download.svg) ](https://bintray.com/drummer-aidan/maven/material-dialogs%3Acore/_latestVersion)
 [ ![Commons](https://api.bintray.com/packages/drummer-aidan/maven/material-dialogs%3Acommons/images/download.svg) ](https://bintray.com/drummer-aidan/maven/material-dialogs%3Acommons/_latestVersion)
 [![Build Status](https://travis-ci.org/afollestad/material-dialogs.svg)](https://travis-ci.org/afollestad/material-dialogs)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a4acc30a9ce440087f7688735359bb8)](https://www.codacy.com/app/drummeraidan_50/material-dialogs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=afollestad/material-dialogs&amp;utm_campaign=Badge_Grade)
 [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/afollestad/material-dialogs/blob/master/LICENSE.txt)
 
 ![Screenshots](https://raw.githubusercontent.com/afollestad/material-dialogs/master/art/readmeshowcase.png)
@@ -91,7 +92,7 @@ repository will allow GitHub to email you whenever I publish a release.
 The Gradle dependency is available via [jCenter](https://bintray.com/drummer-aidan/maven/material-dialogs:core/view).
 jCenter is the default Maven repository used by Android Studio.
 
-The minimum API level supported by this library is API 13 (Honeycomb).
+The minimum API level supported by this library is API 14.
 
 ### Core
 
@@ -101,7 +102,7 @@ You can create basic, list, single/multi choice, progress, input, etc. dialogs w
 ```gradle
 dependencies {
 	// ... other dependencies here
-    compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+    compile 'com.afollestad.material-dialogs:core:0.9.6.0'
 }
 ```
 
@@ -113,7 +114,7 @@ The *commons* module contains extensions to the library that not everyone may ne
 ```gradle
 dependencies {
     // ... other dependencies here
-    compile 'com.afollestad.material-dialogs:commons:0.9.1.0'
+    compile 'com.afollestad.material-dialogs:commons:0.9.6.0'
 }
 ```
 
@@ -273,25 +274,25 @@ To know when the user selects an action button, you set callbacks:
 new MaterialDialog.Builder(this)
     .onPositive(new MaterialDialog.SingleButtonCallback() {
         @Override
-        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        public void onClick(MaterialDialog dialog, DialogAction which) {
             // TODO
         }
     })
     .onNeutral(new MaterialDialog.SingleButtonCallback() {
         @Override
-        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        public void onClick(MaterialDialog dialog, DialogAction which) {
             // TODO
         }
     })
     .onNegative(new MaterialDialog.SingleButtonCallback() {
         @Override
-        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        public void onClick(MaterialDialog dialog, DialogAction which) {
             // TODO
         }
     })
     .onAny(new MaterialDialog.SingleButtonCallback() {
         @Override
-        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        public void onClick(MaterialDialog dialog, DialogAction which) {
             // TODO
         }
     });
@@ -319,7 +320,7 @@ new MaterialDialog.Builder(this)
     .negativeText(R.string.deny)
     .onAny(new MaterialDialog.SingleButtonCallback() {
         @Override
-        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        public void onClick(MaterialDialog dialog, DialogAction which) {
             showToast("Prompt checked? " + dialog.isPromptCheckBoxChecked());
         }
     })
@@ -385,13 +386,18 @@ the single choice callback when user presses the positive action button. The dia
 unless auto dismiss is turned off.
 
 If you make a call to `alwaysCallSingleChoiceCallback()`, the single choice callback will be called
-every time the user selects an item.
+every time the user selects/unselects an item.
 
 ## Coloring Radio Buttons
 
 Like action buttons and many other elements of the Material dialog, you can customize the color of a 
  dialog's radio buttons. The `Builder` class contains a `widgetColor()`, `widgetColorRes()`,
- and `widgetColorAttr()` method. Their names and parameter annotations make them self explanatory.
+ `widgetColorAttr()`, and `choiceWidgetColor()` method. Their names and parameter annotations make them self explanatory.
+
+`widgetColor` is the same color that affects other UI elements. `choiceWidgetColor` is specific to
+single and multiple choice dialogs, it only affects radio buttons and checkboxes. You provide a
+`ColorStateList` rather than a single color which is used to generate a `ColorStateList`.
+
  Note that by default, radio buttons will be colored with the color held in `colorAccent` (for AppCompat)
  or `android:colorAccent` (for the Material theme) in your Activity's theme.
  
@@ -414,7 +420,8 @@ new MaterialDialog.Builder(this)
             public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
                 /**
                  * If you use alwaysCallMultiChoiceCallback(), which is discussed below,
-                 * returning false here won't allow the newly selected check box to actually be selected.
+                 * returning false here won't allow the newly selected check box to actually be selected
+                 * (or the newly unselected check box to be unchecked).
                  * See the limited multi choice dialog example in the sample project for details.
                  **/
                  return true;
@@ -433,14 +440,19 @@ the multi choice callback when user presses the positive action button. The dial
 unless auto dismiss is turned off.
 
 If you make a call to `alwaysCallMultiChoiceCallback()`, the multi choice callback will be called
-every time the user selects an item.
+every time the user selects/unselects an item.
 
 ## Coloring Check Boxes
 
 Like action buttons and many other elements of the Material dialog, you can customize the color of a 
  dialog's check boxes. The `Builder` class contains a `widgetColor()`, `widgetColorRes()`,
- and `widgetColorAttr()` method. Their names and parameter annotations make them self explanatory. 
- Note that by default, check boxes will be colored with the color held in `colorAccent` (for AppCompat)
+ `widgetColorAttr()`, and `choiceWidgetColor()` method. Their names and parameter annotations make them self explanatory.
+
+`widgetColor` is the same color that affects other UI elements. `choiceWidgetColor` is specific to
+single and multiple choice dialogs, it only affects radio buttons and checkboxes. You provide a
+`ColorStateList` rather than a single color which is used to generate a `ColorStateList`.
+
+ Note that by default, radio buttons will be colored with the color held in `colorAccent` (for AppCompat)
  or `android:colorAccent` (for the Material theme) in your Activity's theme.
  
 There's also a global theming attribute as shown in the Global Theming section of this README: `md_widget_color`.
@@ -1109,7 +1121,7 @@ MaterialDialog dialog = new MaterialDialog.Builder(this)
 The Builder is used like this:
 
 ```java
-// Pass AppCompatActivity which implements ColorCallback, along with the title of the dialog
+// Pass a context, along with the title of the dialog
 new ColorChooserDialog.Builder(this, R.string.color_palette)
     .titleSub(R.string.colors)  // title of dialog when viewing shades of a color
     .accentMode(accent)  // when true, will display accent palette instead of primary palette
@@ -1118,10 +1130,10 @@ new ColorChooserDialog.Builder(this, R.string.color_palette)
     .backButton(R.string.md_back_label)  // changes label of the back button
     .preselect(accent ? accentPreselect : primaryPreselect)  // optionally preselects a color
     .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
-    .show();
+    .show(this); // an AppCompatActivity which implements ColorCallback
 ```
 
-The Activity you show the dialog in must implement `ColorCallback`:
+The Activity/Fragment you show the dialog in must implement `ColorCallback`:
 
 ```java
 public class MyActivity implements ColorChooserDialog.ColorCallback {
@@ -1129,7 +1141,7 @@ public class MyActivity implements ColorChooserDialog.ColorCallback {
     // ...
 
     @Override
-    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int color) {
+    public void onColorSelection(ColorChooserDialog dialog, @ColorInt int color) {
         // TODO
     }
 }
@@ -1151,7 +1163,7 @@ int[][] secondary = new int[][] {
 new ColorChooserDialog.Builder(this, R.string.color_palette)
     .titleSub(R.string.colors)
     .customColors(primary, secondary)
-    .show();
+    .show(this);
 ```
 
 The first parameter for primary colors can also take an array resource (`R.array.colors`), which can be
@@ -1160,16 +1172,16 @@ for top level colors.
 
 ## Finding Visible Dialogs
 
-Since the `ColorChooserDialog` is a `DialogFragment`, it attaches to your Activity through its `FragmentManager`.
+Since the `ColorChooserDialog` is a `DialogFragment`, it attaches to your Activity/Fragment through its `FragmentManager`.
 `ColorChooserDialog` has a utility method called `findVisible(AppCompatActivity, String)` that will
 find a visible color chooser if any is visible:
 
 ```java
-ColorChooserDialog primary = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_PRIMARY);
+ColorChooserDialog primary = ColorChooserDialog.findVisible(getSupportFragmentManager(), ColorChooserDialog.TAG_PRIMARY);
 
-ColorChooserDialog accent = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_ACCENT);
+ColorChooserDialog accent = ColorChooserDialog.findVisible(getSupportFragmentManager(), ColorChooserDialog.TAG_ACCENT);
 
-ColorChooserDialog custom = ColorChooserDialog.findVisible(this, ColorChooserDialog.TAG_CUSTOM);
+ColorChooserDialog custom = ColorChooserDialog.findVisible(getSupportFragmentManager(), ColorChooserDialog.TAG_CUSTOM);
 ```
 
 ## User Color Input
@@ -1182,7 +1194,7 @@ new ColorChooserDialog.Builder(this, R.string.color_palette)
     .allowUserColorInput(false)
     .customButton(R.string.md_custom_label)
     .presetsButton(R.string.md_presets_label)
-    .show();
+    .show(this);
 ```
 
 If you want the user to be able to input a custom color, but don't want them to be able to change transparency (alpha):
@@ -1192,7 +1204,7 @@ new ColorChooserDialog.Builder(this, R.string.color_palette)
     .allowUserColorInputAlpha(false)
     .customButton(R.string.md_custom_label)
     .presetsButton(R.string.md_presets_label)
-    .show();
+    .show(this);
 ```
 
 ---
@@ -1218,17 +1230,16 @@ app:useStockLayout="true"
 The Builder is used like this:
 
 ```java
-// Pass AppCompatActivity which implements FileCallback
 new FileChooserDialog.Builder(this)
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .mimeType("image/*") // Optional MIME type filter
     .extensionsFilter(".png", ".jpg") // Optional extension filter, will override mimeType()
     .tag("optional-identifier")
     .goUpLabel("Up") // custom go up label, default label is "..."
-    .show();
+    .show(this); // an AppCompatActivity which implements FileCallback
 ```
 
-The Activity you show the dialog in must implement `FileCallback`:
+The Activity/Fragment you show the dialog in must implement `FileCallback`:
 
 ```java
 public class MyActivity implements FileChooserDialog.FileCallback {
@@ -1236,7 +1247,7 @@ public class MyActivity implements FileChooserDialog.FileCallback {
     // ...
 
     @Override
-    public void onFileSelection(@NonNull FileChooserDialog dialog, @NonNull File file) {
+    public void onFileSelection(FileChooserDialog dialog, File file) {
         // TODO
         final String tag = dialog.getTag(); // gets tag set from Builder, if you use multiple dialogs
     }
@@ -1256,10 +1267,10 @@ new FolderChooserDialog.Builder(this)
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .tag("optional-identifier")
     .goUpLabel("Up") // custom go up label, default label is "..."
-    .show();
+    .show(this);
 ```
 
-The Activity you show the dialog in must implement `FolderCallback`:
+The Activity/Fragment you show the dialog in must implement `FolderCallback`:
 
 ```java
 public class MyActivity implements FolderChooserDialog.FolderCallback {
@@ -1267,7 +1278,7 @@ public class MyActivity implements FolderChooserDialog.FolderCallback {
     // ...
 
     @Override
-    public void onFolderSelection(@NonNull FolderChooserDialog dialog, @NonNull File folder) {
+    public void onFolderSelection(FolderChooserDialog dialog, File folder) {
         // TODO
         final String tag = dialog.getTag(); // gets tag set from Builder, if you use multiple dialogs
     }
@@ -1284,7 +1295,7 @@ new FolderChooserDialog.Builder(this)
     .initialPath("/sdcard/Download")  // changes initial path, defaults to external storage directory
     .tag("optional-identifier")
     .allowNewFolder(true, R.string.new_folder)  // pass 0 in the second parameter to use default button label
-    .show();
+    .show(this);
 ```
 
 ---

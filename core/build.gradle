@@ -1,37 +1,41 @@
 apply plugin: 'com.android.library'
+apply from: '../dependencies.gradle'
 
 ext {
     PUBLISH_GROUP_ID = 'com.afollestad.material-dialogs'
     PUBLISH_ARTIFACT_ID = 'core'
-    PUBLISH_VERSION = '0.9.1.0'
-    SUPPORT_LIBRARY_VERSION = '25.0.0'
-    BUILD_TOOLS = "24.0.3"
-    TARGET_SDK = 25
+    PUBLISH_VERSION = versions.publishVersion
 }
 
 android {
-    compileSdkVersion TARGET_SDK
-    buildToolsVersion BUILD_TOOLS
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
 
     defaultConfig {
-        minSdkVersion 13
-        targetSdkVersion TARGET_SDK
-        versionCode 1
-        versionName PUBLISH_VERSION
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.publishVersionCode
+        versionName versions.publishVersion
         consumerProguardFiles 'progress-proguard.txt'
     }
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
     }
+    sourceSets {
+        main.res.srcDirs = [
+            'src/main/res',
+            'src/main/res-public'
+        ]
+    }
 }
 
 dependencies {
-    compile "com.android.support:support-v13:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
-    compile "me.zhanghai.android.materialprogressbar:library:1.3.0"
+    implementation 'com.google.code.findbugs:jsr305:' + versions.findBugs
+    implementation 'com.android.support:support-annotations:' + versions.supportLib
+    implementation 'com.android.support:appcompat-v7:' + versions.supportLib
+    implementation 'com.android.support:recyclerview-v7:' + versions.supportLib
+    implementation 'me.zhanghai.android.materialprogressbar:library:' + versions.mdProgressBar
 }
 
 apply from: 'https://raw.githubusercontent.com/afollestad/aidanfollestad.com/master/android-lib-release.gradle'
